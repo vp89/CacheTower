@@ -57,7 +57,7 @@ namespace CacheTower.Providers.FileSystem
 		/// <typeparam name="T">The type for <paramref name="value"/> that will be serialized.</typeparam>
 		/// <param name="stream">The stream that the serialization is written to.</param>
 		/// <param name="value">The value to be serialized.</param>
-		protected abstract void Serialize<T>(Stream stream, T value);
+		protected abstract Stream Serialize<T>(T value);
 
 		private async Task<T?> DeserializeFileAsync<T>(string path)
 		{
@@ -73,9 +73,8 @@ namespace CacheTower.Providers.FileSystem
 		private async Task SerializeFileAsync<T>(string path, T value)
 		{
 			using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, 1024))
-			using (var memStream = new MemoryStream())
+			using (var memStream = Serialize(value))
 			{
-				Serialize(memStream, value);
 				memStream.Seek(0, SeekOrigin.Begin);
 				await memStream.CopyToAsync(stream);
 			}
@@ -142,7 +141,7 @@ namespace CacheTower.Providers.FileSystem
 		{
 			var bytes = Encoding.UTF8.GetBytes(cacheKey);
 			var hashBytes = FileNameHashAlgorithm.ComputeHash(bytes);
-		
+
 #elif NETSTANDARD2_1
 		private unsafe string GetFileName(ReadOnlySpan<char> cacheKey)
 		{

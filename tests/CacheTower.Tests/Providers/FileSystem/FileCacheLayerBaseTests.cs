@@ -27,9 +27,10 @@ namespace CacheTower.Tests.Providers.FileSystem
 				return default;
 			}
 
-			protected override void Serialize<T>(Stream stream, T value)
+			protected override Stream Serialize<T>(T value)
 			{
 				SerializeCount++;
+				return new MemoryStream();
 			}
 		}
 

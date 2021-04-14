@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using ProtoBuf;
 using ProtoBuf.Meta;
 
@@ -14,6 +13,7 @@ namespace CacheTower.Providers.FileSystem.Protobuf
 	/// </para>
 	/// </remarks>
 	/// <inheritdoc/>
+	[Obsolete]
 	public class ProtobufFileCacheLayer : FileCacheLayerBase<ProtobufManifestEntry>
 	{
 		private static readonly object RuntimeTypeLock = new object();
@@ -41,9 +41,11 @@ namespace CacheTower.Providers.FileSystem.Protobuf
 		}
 
 		/// <inheritdoc/>
-		protected override void Serialize<T>(Stream stream, T value)
+		protected override Stream Serialize<T>(T value)
 		{
+			var stream = new MemoryStream();
 			Serializer.Serialize(stream, value);
+			return stream;
 		}
 	}
 }
