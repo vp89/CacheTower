@@ -21,16 +21,15 @@ namespace CacheTower.Tests.Providers.FileSystem
 			public int DeserializeCount { get; private set; }
 
 
-			protected override T Deserialize<T>(MemoryStream stream)
+			protected override T Deserialize<T>(Stream stream)
 			{
 				DeserializeCount++;
 				return default;
 			}
 
-			protected override MemoryStream Serialize<T>(T value)
+			protected override void Serialize<T>(Stream stream, T value)
 			{
 				SerializeCount++;
-				return new MemoryStream();
 			}
 		}
 

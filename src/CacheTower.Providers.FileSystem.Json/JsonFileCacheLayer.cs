@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace CacheTower.Providers.FileSystem.Json
@@ -9,7 +12,6 @@ namespace CacheTower.Providers.FileSystem.Json
 	/// The <see cref="JsonFileCacheLayer"/> uses <a href="https://github.com/JamesNK/Newtonsoft.Json/">Newtonsoft.Json</a> to serialize and deserialize the cache items to the file system.
 	/// </remarks>
 	/// <inheritdoc/>
-	[Obsolete]
 	public class JsonFileCacheLayer : FileCacheLayerBase<ManifestEntry>, ICacheLayer
 	{
 		private static readonly JsonSerializer Serializer = new JsonSerializer();
@@ -21,7 +23,7 @@ namespace CacheTower.Providers.FileSystem.Json
 		public JsonFileCacheLayer(string directoryPath) : base(directoryPath, ".json") { }
 
 		/// <inheritdoc/>
-		protected override T Deserialize<T>(MemoryStream stream)
+		protected override T Deserialize<T>(Stream stream)
 		{
 			using (var streamReader = new StreamReader(stream, Encoding.UTF8, false, 1024))
 			using (var jsonReader = new JsonTextReader(streamReader))
@@ -37,7 +39,7 @@ namespace CacheTower.Providers.FileSystem.Json
 				{
 					return default!;
 				}
-
+				
 				//Read value start
 				if (!jsonReader.Read() || jsonReader.TokenType == JsonToken.Null)
 				{
@@ -49,10 +51,8 @@ namespace CacheTower.Providers.FileSystem.Json
 		}
 
 		/// <inheritdoc/>
-		protected override MemoryStream Serialize<T>(T value)
+		protected override void Serialize<T>(Stream stream, T value)
 		{
-			var stream = new MemoryStream();
-
 			using (var streamWriter = new StreamWriter(stream, Encoding.UTF8, 1024, true))
 			using (var jsonWriter = new JsonTextWriter(streamWriter))
 			{
@@ -73,11 +73,9 @@ namespace CacheTower.Providers.FileSystem.Json
 				}
 
 				jsonWriter.WriteEndObject();
-
+				
 				jsonWriter.CloseOutput = false;
 			}
-
-			return stream;
 		}
 	}
 }
