@@ -85,7 +85,7 @@ namespace CacheTower.Providers.Redis
 			{
 				using (var stream = new MemoryStream(redisValue))
 				{
-					var redisCacheEntry = Serializer.DeserializeObject<RedisCacheEntry<T>>(stream);
+					var redisCacheEntry = Serializer.Deserialize<RedisCacheEntry<T>>(stream);
 					return new CacheEntry<T>(redisCacheEntry.Value, redisCacheEntry.Expiry);
 				}
 			}
@@ -114,7 +114,7 @@ namespace CacheTower.Providers.Redis
 				Value = cacheEntry.Value!
 			};
 
-			using (var stream = Serializer.SerializeObject(redisCacheEntry))
+			using (var stream = Serializer.Serialize(redisCacheEntry))
 			{
 				var redisValue = RedisValue.CreateFrom(stream);
 				await Database.StringSetAsync(cacheKey, redisValue, expiryOffset);

@@ -4,8 +4,8 @@ namespace CacheTower
 {
     public interface ICacheSerializer
     {
-        MemoryStream SerializeObject<T>(T cacheEntry);
+        MemoryStream Serialize<T>(T cacheEntry);
 
-        T DeserializeObject<T>(MemoryStream stream);
+        T Deserialize<T>(MemoryStream stream);
     }
 }

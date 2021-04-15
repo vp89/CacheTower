@@ -5,7 +5,7 @@ namespace CacheTower.Serializers.Protobuf
 {
 	public class ProtobufCacheSerializer : ICacheSerializer
 	{
-		public MemoryStream SerializeObject<T>(T cacheEntry)
+		public MemoryStream Serialize<T>(T cacheEntry)
 		{
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, cacheEntry);
@@ -13,7 +13,7 @@ namespace CacheTower.Serializers.Protobuf
 			return stream;
 		}
 
-		public T DeserializeObject<T>(MemoryStream stream)
+		public T Deserialize<T>(MemoryStream stream)
 		{
 			return Serializer.Deserialize<T>(stream);
 		}
