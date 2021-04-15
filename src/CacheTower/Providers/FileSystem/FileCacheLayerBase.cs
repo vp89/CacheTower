@@ -49,7 +49,7 @@ namespace CacheTower.Providers.FileSystem
 		/// <typeparam name="T">The type to deserialize to.</typeparam>
 		/// <param name="stream">The stream to deserialize from.</param>
 		/// <returns></returns>
-		protected abstract T Deserialize<T>(Stream stream);
+		protected abstract T Deserialize<T>(MemoryStream stream);
 
 		/// <summary>
 		/// Provides <typeparamref name="T"/> serialization to a stream.
@@ -57,7 +57,7 @@ namespace CacheTower.Providers.FileSystem
 		/// <typeparam name="T">The type for <paramref name="value"/> that will be serialized.</typeparam>
 		/// <param name="stream">The stream that the serialization is written to.</param>
 		/// <param name="value">The value to be serialized.</param>
-		protected abstract Stream Serialize<T>(T value);
+		protected abstract MemoryStream Serialize<T>(T value);
 
 		private async Task<T?> DeserializeFileAsync<T>(string path)
 		{

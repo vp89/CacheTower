@@ -35,13 +35,13 @@ namespace CacheTower.Providers.FileSystem.Protobuf
 		}
 
 		/// <inheritdoc/>
-		protected override T Deserialize<T>(Stream stream)
+		protected override T Deserialize<T>(MemoryStream stream)
 		{
 			return Serializer.Deserialize<T>(stream);
 		}
 
 		/// <inheritdoc/>
-		protected override Stream Serialize<T>(T value)
+		protected override MemoryStream Serialize<T>(T value)
 		{
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, value);

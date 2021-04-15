@@ -21,7 +21,7 @@ namespace CacheTower.Providers.FileSystem.Json
 		public JsonFileCacheLayer(string directoryPath) : base(directoryPath, ".json") { }
 
 		/// <inheritdoc/>
-		protected override T Deserialize<T>(Stream stream)
+		protected override T Deserialize<T>(MemoryStream stream)
 		{
 			using (var streamReader = new StreamReader(stream, Encoding.UTF8, false, 1024))
 			using (var jsonReader = new JsonTextReader(streamReader))
@@ -49,7 +49,7 @@ namespace CacheTower.Providers.FileSystem.Json
 		}
 
 		/// <inheritdoc/>
-		protected override Stream Serialize<T>(T value)
+		protected override MemoryStream Serialize<T>(T value)
 		{
 			var stream = new MemoryStream();
 

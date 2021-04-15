@@ -11,12 +11,12 @@ namespace CacheTower.Providers.FileSystem
             Serializer = serializer;
         }
 
-        protected override T Deserialize<T>(Stream stream)
+        protected override T Deserialize<T>(MemoryStream stream)
         {
             return Serializer.DeserializeObject<T>(stream);
         }
 
-        protected override Stream Serialize<T>(T value)
+        protected override MemoryStream Serialize<T>(T value)
         {
             return Serializer.SerializeObject(value);
         }

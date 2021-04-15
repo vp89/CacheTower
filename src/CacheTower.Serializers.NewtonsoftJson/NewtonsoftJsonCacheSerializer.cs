@@ -13,7 +13,7 @@ namespace CacheTower.Serializers.NewtonsoftJson
 			Serializer = new JsonSerializer();
 		}
 
-		public Stream SerializeObject<T>(T cacheEntry)
+		public MemoryStream SerializeObject<T>(T cacheEntry)
 		{
 			var stream = new MemoryStream();
 
@@ -26,7 +26,7 @@ namespace CacheTower.Serializers.NewtonsoftJson
 			return stream;
 		}
 
-		public T DeserializeObject<T>(Stream stream)
+		public T DeserializeObject<T>(MemoryStream stream)
 		{
 			using (var streamReader = new StreamReader(stream, Encoding.UTF8, false, 1024))
 			using (var jsonReader = new JsonTextReader(streamReader))
