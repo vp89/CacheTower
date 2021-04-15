@@ -3,8 +3,10 @@ using ProtoBuf;
 
 namespace CacheTower.Serializers.Protobuf
 {
+	/// <inheritdoc />
 	public class ProtobufCacheSerializer : ICacheSerializer
 	{
+		/// <inheritdoc />
 		public MemoryStream Serialize<T>(T cacheEntry)
 		{
 			var stream = new MemoryStream();
@@ -13,6 +15,7 @@ namespace CacheTower.Serializers.Protobuf
 			return stream;
 		}
 
+		/// <inheritdoc />
 		public T Deserialize<T>(MemoryStream stream)
 		{
 			return Serializer.Deserialize<T>(stream);
