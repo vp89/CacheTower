@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -17,8 +18,7 @@ namespace CacheTower.Serializers.NewtonsoftJson
 			Serializer = new JsonSerializer();
 		}
 
-		/// <inheritdoc />
-		public MemoryStream Serialize<T>(T cacheEntry)
+		private MemoryStream Serialize<T>(T cacheEntry)
 		{
 			var stream = new MemoryStream();
 
@@ -31,13 +31,23 @@ namespace CacheTower.Serializers.NewtonsoftJson
 			return stream;
 		}
 
-		/// <inheritdoc />
-		public T Deserialize<T>(MemoryStream stream)
+		public MemoryStream SerializeCacheEntry<T>(DateTime expiry, T? value)
+		{
+			var cacheEntry = new NewtonsoftJsonCacheEntry<T>()
+			{
+				Expiry = expiry,
+				Value = value
+			};
+
+			return Serialize(cacheEntry);
+		}
+
+		public ICacheEntry<T> DeserializeCacheEntry<T>(MemoryStream stream)
 		{
 			using (var streamReader = new StreamReader(stream, Encoding.UTF8, false, 1024))
 			using (var jsonReader = new JsonTextReader(streamReader))
 			{
-				return Serializer.Deserialize<T>(jsonReader);
+				return Serializer.Deserialize<NewtonsoftJsonCacheEntry<T>>(jsonReader);
 			}
 		}
 	}

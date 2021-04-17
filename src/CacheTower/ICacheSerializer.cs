@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace CacheTower
@@ -10,10 +11,11 @@ namespace CacheTower
         /// <summary>
         /// Serialize a cache entry onto a MemoryStream
         /// </summary>
-        /// <param name="cacheEntry"></param>
+        /// <param name="expiry"></param>
+        /// /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        MemoryStream Serialize<T>(T cacheEntry);
+        MemoryStream SerializeCacheEntry<T>(DateTime expiry, T? value);
 
         /// <summary>
         /// Deserialize a cache entry from a MemoryStream
@@ -21,6 +23,6 @@ namespace CacheTower
         /// <param name="stream"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T Deserialize<T>(MemoryStream stream);
+        ICacheEntry<T> DeserializeCacheEntry<T>(MemoryStream stream);
     }
 }

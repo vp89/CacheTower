@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ProtoBuf;
 
 namespace CacheTower.Serializers.Protobuf
@@ -12,8 +13,7 @@ namespace CacheTower.Serializers.Protobuf
 	/// <inheritdoc />
 	public class ProtobufCacheSerializer : ICacheSerializer
 	{
-		/// <inheritdoc />
-		public MemoryStream Serialize<T>(T cacheEntry)
+		private MemoryStream Serialize<T>(T cacheEntry)
 		{
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, cacheEntry);
@@ -22,9 +22,20 @@ namespace CacheTower.Serializers.Protobuf
 		}
 
 		/// <inheritdoc />
-		public T Deserialize<T>(MemoryStream stream)
+		public MemoryStream SerializeCacheEntry<T>(DateTime expiry, T? value)
 		{
-			return Serializer.Deserialize<T>(stream);
+			var cacheEntry = new ProtobufCacheEntry<T>
+			{
+				Expiry = expiry,
+				Value = value
+			};
+
+			return Serialize(cacheEntry);
+		}
+
+		public ICacheEntry<T> DeserializeCacheEntry<T>(MemoryStream stream)
+		{
+			return Serializer.Deserialize<ProtobufCacheEntry<T>>(stream);
 		}
 	}
 }

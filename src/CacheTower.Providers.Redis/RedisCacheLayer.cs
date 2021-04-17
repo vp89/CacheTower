@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using CacheTower.Providers.Redis.Entities;
 using CacheTower.Serializers.Protobuf;
 using StackExchange.Redis;
 
@@ -86,7 +85,7 @@ namespace CacheTower.Providers.Redis
 			{
 				using (var stream = new MemoryStream(redisValue))
 				{
-					var redisCacheEntry = Serializer.Deserialize<RedisCacheEntry<T>>(stream);
+					var redisCacheEntry = Serializer.DeserializeCacheEntry<T>(stream);
 					return new CacheEntry<T>(redisCacheEntry.Value, redisCacheEntry.Expiry);
 				}
 			}
@@ -109,13 +108,7 @@ namespace CacheTower.Providers.Redis
 				return;
 			}
 
-			var redisCacheEntry = new RedisCacheEntry<T>
-			{
-				Expiry = cacheEntry.Expiry,
-				Value = cacheEntry.Value!
-			};
-
-			using (var stream = Serializer.Serialize(redisCacheEntry))
+			using (var stream = Serializer.SerializeCacheEntry(cacheEntry.Expiry, cacheEntry.Value!))
 			{
 				var redisValue = RedisValue.CreateFrom(stream);
 				await Database.StringSetAsync(cacheKey, redisValue, expiryOffset);
