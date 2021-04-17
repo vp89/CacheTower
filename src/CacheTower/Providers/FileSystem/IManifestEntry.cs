@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace CacheTower.Providers.FileSystem
 {
@@ -11,7 +13,6 @@ namespace CacheTower.Providers.FileSystem
 		/// The file name that contains the cached data.
 		/// </summary>
 		string? FileName { get; set; }
-		
 		/// <summary>
 		/// The expiry date of the cached value.
 		/// </summary>
